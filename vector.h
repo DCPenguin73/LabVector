@@ -14,7 +14,7 @@
  *        vector                 : A class that represents a Vector
  *        vector::iterator       : An iterator through Vector
  * Author
- *    <your names here>
+ *    Daniel Carr, Jarom Anderson, Arlo Jolley
  ************************************************************************/
 
 #pragma once
@@ -47,12 +47,12 @@ public:
    //
    // Construct
    //
-   vector(const A & a = A());
-   vector(size_t numElements,                const A & a = A());
-   vector(size_t numElements, const T & t,   const A & a = A());
-   vector(const std::initializer_list<T>& l, const A & a = A());
-   vector(const vector &  rhs);
-   vector(      vector && rhs);
+   vector(const A& a = A());                                      // bob
+   vector(size_t numElements,                const A & a = A());  // billy
+   vector(size_t numElements, const T & t,   const A & a = A());  // joe
+   vector(const std::initializer_list<T>& l, const A & a = A());  // moe
+   vector(const vector &  rhs);                                   // jr
+   vector(      vector && rhs);                                   // guss
   ~vector();
 
    //
@@ -110,9 +110,9 @@ public:
    //
    // Status
    //
-   size_t  size()          const { return 999;}
-   size_t  capacity()      const { return 999;}
-   bool empty()            const { return true;}
+   size_t  size()          const { return numElements;}
+   size_t  capacity()      const { return numCapacity;}
+   bool empty()            const { return (numCapacity == 0) ? true : false ;}
   
 private:
    
@@ -195,12 +195,12 @@ private:
  * non-default constructor: set the number of elements,
  * construct each element, and copy the values over
  ****************************************/
-template <typename T, typename A>
+template <typename T, typename A>                                             // bob
 vector <T, A> :: vector(const A & a)
 {
-   data = new T[100];
-   numElements = 19;
-   numCapacity = 29;
+   data = nullptr;
+   numElements = 0;
+   numCapacity = 0;
 }
 
 
@@ -209,12 +209,12 @@ vector <T, A> :: vector(const A & a)
  * non-default constructor: set the number of elements,
  * construct each element, and copy the values over
  ****************************************/
-template <typename T, typename A>
+template <typename T, typename A>                                             // joe
 vector <T, A> :: vector(size_t num, const T & t, const A & a) 
 {
    data = new T[100];
-   numElements = 19;
-   numCapacity = 29;
+   numElements = num;
+   numCapacity = num;
 }
 
 /*****************************************
@@ -222,7 +222,7 @@ vector <T, A> :: vector(size_t num, const T & t, const A & a)
  * Create a vector with an initialization list.
  ****************************************/
 template <typename T, typename A>
-vector <T, A> :: vector(const std::initializer_list<T> & l, const A & a) 
+vector <T, A> :: vector(const std::initializer_list<T> & l, const A & a)      // moe
 {
    data = new T[100];
    numElements = 19;
@@ -234,12 +234,20 @@ vector <T, A> :: vector(const std::initializer_list<T> & l, const A & a)
  * non-default constructor: set the number of elements,
  * construct each element, and copy the values over
  ****************************************/
-template <typename T, typename A>
+template <typename T, typename A>                                             // billy
 vector <T, A> :: vector(size_t num, const A & a) 
 {
-   data = new T[100];
-   numElements = 19;
-   numCapacity = 29;
+    if (num > 0)
+    {
+		//insert list maker of all 0's
+    }
+    else
+	{
+		data = nullptr;
+	}
+   //data = nullptr;
+   numElements = num;
+   numCapacity = num;
 }
 
 /*****************************************
@@ -248,7 +256,7 @@ vector <T, A> :: vector(size_t num, const A & a)
  * call the copy constructor on each element
  ****************************************/
 template <typename T, typename A>
-vector <T, A> :: vector (const vector & rhs) 
+vector <T, A> :: vector (const vector & rhs)                                  // jr
 {
    data = new T[100];
    numElements = 19;
@@ -260,7 +268,7 @@ vector <T, A> :: vector (const vector & rhs)
  * Steal the values from the RHS and set it to zero.
  ****************************************/
 template <typename T, typename A>
-vector <T, A> :: vector (vector && rhs) 
+vector <T, A> :: vector (vector && rhs)                                      // guss
 {
    data = new T[100];
    numElements = 19;
