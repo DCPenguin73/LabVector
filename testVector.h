@@ -31,9 +31,9 @@ public:
       test_construct_default();
       test_construct_sizeZero();
       test_construct_sizeFour();
-      //test_construct_sizeFourFill();
-      //test_constructCopy_empty();
-      //test_constructCopy_standard();
+      test_construct_sizeFourFill();
+      test_constructCopy_empty();
+      test_constructCopy_standard();
       //test_constructCopy_partiallyFilled();
       //test_constructMove_empty();
       //test_constructMove_standard();

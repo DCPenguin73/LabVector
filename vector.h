@@ -212,7 +212,15 @@ vector <T, A> :: vector(const A & a)
 template <typename T, typename A>                                             // joe
 vector <T, A> :: vector(size_t num, const T & t, const A & a) 
 {
-   data = new T[100];
+    if (num > 0)
+    {
+		data = alloc.allocate(num);
+		for (size_t i = 0; i < num; i++)
+		   alloc.construct(&data[i], t);
+	}
+	else
+	   data = nullptr;
+   //data = new T[100];
    numElements = num;
    numCapacity = num;
 }
@@ -240,6 +248,9 @@ vector <T, A> :: vector(size_t num, const A & a)
     if (num > 0)
     {
 		//insert list maker of all 0's
+		data = alloc.allocate(num);
+		for (size_t i = 0; i < num; i++)
+			alloc.construct(&data[i]);
     }
     else
 	{
@@ -258,9 +269,17 @@ vector <T, A> :: vector(size_t num, const A & a)
 template <typename T, typename A>
 vector <T, A> :: vector (const vector & rhs)                                  // jr
 {
-   data = new T[100];
+    if (rhs.numElements > 0)
+    {
+		data = alloc.allocate(rhs.numElements);
+		for (size_t i = 0; i < rhs.numElements; i++)
+			alloc.construct(&data[i], rhs.data[i]);
+	}
+	else
+		data = nullptr;
+   /*data = new T[100];
    numElements = 19;
-   numCapacity = 29;
+   numCapacity = 29;*/
 }
    
 /*****************************************
