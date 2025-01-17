@@ -26,7 +26,7 @@ public:
    void run()
    {
       reset();
-      
+
       // Construct
       test_construct_default();
       test_construct_sizeZero();
@@ -34,7 +34,7 @@ public:
       test_construct_sizeFourFill();
       test_constructCopy_empty();
       test_constructCopy_standard();
-      //test_constructCopy_partiallyFilled();
+      test_constructCopy_partiallyFilled();
       //test_constructMove_empty();
       //test_constructMove_standard();
       //test_constructMove_partiallyFilled();
@@ -76,13 +76,13 @@ public:
       //test_iterator_notEquals_different();
 
       //// Access
-      //test_subscript_read();
-      //test_subscript_write();
-      //test_front_read();
-      //test_front_write();
-      //test_back_read();
-      //test_back_write();
-      //test_back_partiallyfilled();
+      test_subscript_read();
+      test_subscript_write();
+      test_front_read();
+      test_front_write();
+      test_back_read();
+      test_back_write();
+      test_back_partiallyfilled();
 
       //// Insert
       //test_pushback_empty();
@@ -127,11 +127,11 @@ public:
 
       report("Vector");
    }
-   
+
    /***************************************
     * CONSTRUCTOR
     ***************************************/
-   
+
    // default constructor, no allocations
    void test_construct_default()
    {  // setup
@@ -184,7 +184,7 @@ public:
       //    +----+----+----+----+
       assertUnit(v.data != nullptr);
       if (v.data)
-      { 
+      {
          assertUnit(v.data[0] == Spy());
          assertUnit(v.data[1] == Spy());
          assertUnit(v.data[2] == Spy());
@@ -218,7 +218,7 @@ public:
       //    +----+----+----+----+
       assertUnit(v.data != nullptr);
       if (v.data)
-      { 
+      {
          assertUnit(v.data[0] == Spy(99));
          assertUnit(v.data[1] == Spy(99));
          assertUnit(v.data[2] == Spy(99));
@@ -294,11 +294,11 @@ public:
       assertUnit(Spy::numCopy() == 0);
       assertUnit(Spy::numAssign() == 0);
    }
-   
+
    /***************************************
     * COPY CONSTRUCTOR
     ***************************************/
-   
+
    // copy constructor of an empty vector
    void test_constructCopy_empty()
    {  // setup
@@ -319,7 +319,7 @@ public:
       assertEmptyFixture(vSrc);
       assertEmptyFixture(vDest);
    }  // teardown
-   
+
    // copy constructor of a 4-element collection
    void test_constructCopy_standard()
    {  // setup
@@ -357,7 +357,7 @@ public:
       teardownStandardFixture(vSrc);
       teardownStandardFixture(vDest);
    }
-   
+
    // copy constructor of a 2-element, 4-capacity collection
    void test_constructCopy_partiallyFilled()
    {  // setup
@@ -409,11 +409,11 @@ public:
       teardownStandardFixture(vSrc);
       teardownStandardFixture(vDest);
    }
-   
+
    /***************************************
     * MOVE CONSTRUCTOR
     ***************************************/
-   
+
    // move constructor of an empty vector
    void test_constructMove_empty()
    {  // setup
@@ -434,7 +434,7 @@ public:
       assertEmptyFixture(vSrc);
       assertEmptyFixture(vDest);
    }  // teardown
-   
+
    // move constructor of a 4-element collection
    void test_constructMove_standard()
    {  // setup
@@ -469,7 +469,7 @@ public:
       teardownStandardFixture(vSrc);
       teardownStandardFixture(vDest);
    }
-   
+
    // move constructor of a 2-element, 4-capacity collection
    void test_constructMove_partiallyFilled()
    {  // setup
@@ -513,11 +513,11 @@ public:
       teardownStandardFixture(vSrc);
       teardownStandardFixture(vDest);
    }
-   
+
    /***************************************
     * CONSTRUCTOR INITIALIZE LIST
     ***************************************/
-   
+
    // empty initialization list
    void test_constructInit_empty()
    {  // setup
@@ -536,7 +536,7 @@ public:
       assertUnit(Spy::numDestructor() == 0);
       assertEmptyFixture(v);
    }  // teardown
-   
+
    // use the initialization list to create the standard fixture
    void test_constructInit_standard()
    {  // setup
@@ -562,11 +562,11 @@ public:
       // teardown
       teardownStandardFixture(v);
    }
-   
+
    /***************************************
     * RESIZE, RESERVE AND SHRINK-TO-FIT
     ***************************************/
-   
+
    // resize an empty vector with zero elements
    void test_resize_emptyZero()
    {  // setup
@@ -587,7 +587,7 @@ public:
       assertUnit(Spy::numDestructor() == 0);
       assertEmptyFixture(v);
    }  // teardown
-   
+
    // start with an empty vector and resize to four
    void test_resize_emptyFourDefault()
    {  // setup
@@ -614,7 +614,7 @@ public:
       // teardown
       teardownStandardFixture(v);
    }
-   
+
    // resize four elements with the provided value
    void test_resize_emptyFourValue()
    {  // setup
@@ -642,7 +642,7 @@ public:
       // teardown
       teardownStandardFixture(v);
    }
-   
+
    // resize the standard fixture to zero
    void test_resize_fourZero()
    {  // setup
@@ -674,7 +674,7 @@ public:
       // teardown
       teardownStandardFixture(v);
    }
-   
+
    // grow the vector from 4 to 6 with default values
    void test_resize_fourSixDefault()
    {  // setup
@@ -694,7 +694,7 @@ public:
       assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numAlloc() == 0);
-      assertUnit(Spy::numCopy() == 0);      // copy 
+      assertUnit(Spy::numCopy() == 0);      // copy
       assertUnit(Spy::numAssign() == 0);
       assertUnit(Spy::numAssignMove() == 0);
       //      0    1    2    3    4    5
@@ -714,7 +714,7 @@ public:
       // teardown
       teardownStandardFixture(v);
    }
-   
+
    // grow the vector from 4 to 6 with provided value
    void test_resize_fourSixValue()
    {  // setup
@@ -755,7 +755,7 @@ public:
       // teardown
       teardownStandardFixture(v);
    }
-   
+
    // reserve zero on an empty vector
    void test_reserve_emptyZero()
    {  // setup
@@ -776,7 +776,7 @@ public:
       assertUnit(Spy::numDestructor() == 0);
       assertEmptyFixture(v);
    }  // teardown
-   
+
    // increase the capacity on an empty vector to ten
    void test_reserve_emptyTen()
    {  // setup
@@ -837,7 +837,7 @@ public:
       // teardown
       teardownStandardFixture(v);
    }
-   
+
    // change the capacity to its current size
    void test_reserve_fourFour()
    {  // setup
@@ -871,7 +871,7 @@ public:
       // teardown
       teardownStandardFixture(v);
    }
-   
+
    // increase the capacity
    void test_reserve_fourTen()
    {  // setup
@@ -887,7 +887,7 @@ public:
       // exercise
       v.reserve(10);
       // verify
-      assertUnit(Spy::numCopyMove() == 0);   
+      assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numAlloc() == 0);
       assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numDefault() == 0);
@@ -905,7 +905,7 @@ public:
       // teardown
       teardownStandardFixture(v);
    }
-   
+
    // attempt to reserve 0 when we already have four elements
    void test_reserve_standardZero()
    {  // setup
@@ -937,7 +937,7 @@ public:
       // teardown
       teardownStandardFixture(v);
    }
-   
+
    // reserve six extra spots from the standard fixture
    void test_reserve_standardTen()
    {  // setup
@@ -954,8 +954,8 @@ public:
       assertUnit(v.numCapacity == 10);
       assertUnit(Spy::numCopyMove() == 4);   // copy-move [26,49,67,89]
       assertUnit(Spy::numDestructor() == 4); // destroy the now-empty [26,49,67,89]
-      assertUnit(Spy::numCopy() == 0);  
-      assertUnit(Spy::numAlloc() == 0); 
+      assertUnit(Spy::numCopy() == 0);
+      assertUnit(Spy::numAlloc() == 0);
       assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numDefault() == 0);
       assertUnit(Spy::numNondefault() == 0);
@@ -970,7 +970,7 @@ public:
       // teardown
       teardownStandardFixture(v);
    }
-   
+
    // shrink an empty fixture
    void test_shrink_empty()
    {  // setup
@@ -990,7 +990,7 @@ public:
       assertUnit(Spy::numDestructor() == 0);
       assertEmptyFixture(v);
    }  // teardown
-   
+
    // remove extra capacity when there are no elements
    void test_shrink_toEmpty()
    {  // setup
@@ -1017,7 +1017,7 @@ public:
       assertUnit(Spy::numDestructor() == 0);
       assertEmptyFixture(v);
    }  // teardown
-   
+
    // attempt to shrink when the vector is filled
    void test_shrink_standard()
    {  // setup
@@ -1044,7 +1044,7 @@ public:
       // teardown
       teardownStandardFixture(v);
    }
-   
+
    // shrink a vector with two extra slots
    void test_shrink_twoExtraSlots()
    {  // setup
@@ -1082,7 +1082,7 @@ public:
       // teardown
       teardownStandardFixture(v);
    }
-   
+
    /***************************************
     * SIZE EMPTY CAPACITY
     ***************************************/
@@ -1097,7 +1097,7 @@ public:
       assertUnit(0 == size);
       assertEmptyFixture(v);
    }  // teardown
-   
+
    // size of a full vector
    void test_size_full()
    {  // setup
@@ -1115,7 +1115,7 @@ public:
       // teardown
       teardownStandardFixture(v);
    }
-   
+
    // empty vector empty?
    void test_empty_empty()
    {  // setup
@@ -1126,7 +1126,7 @@ public:
       assertUnit(true == empty);
       assertEmptyFixture(v);
    }  // teardown
-   
+
    // full vector empty?
    void test_empty_full()
    {  // setup
@@ -1155,7 +1155,7 @@ public:
       assertUnit(0 == capacity);
       assertEmptyFixture(v);
    }  // teardown
-   
+
    // size of a full vector
    void test_capacity_full()
    {  // setup
@@ -1226,7 +1226,7 @@ public:
       vDest.swap(vSrc);
       // verify
       assert(vDest.data != vSrc.data);
-      assertUnit(Spy::numAssign() == 0);   
+      assertUnit(Spy::numAssign() == 0);
       assertUnit(Spy::numAlloc() == 0);
       assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numDefault() == 0);
@@ -1283,9 +1283,9 @@ public:
       vDest.swap(vSrc);
       // verify
       assert(vDest.data != vSrc.data);
-      assertUnit(Spy::numCopy() == 0);       
-      assertUnit(Spy::numAlloc() == 0);      
-      assertUnit(Spy::numDestructor() == 0); 
+      assertUnit(Spy::numCopy() == 0);
+      assertUnit(Spy::numAlloc() == 0);
+      assertUnit(Spy::numDestructor() == 0);
       assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numDefault() == 0);
       assertUnit(Spy::numNondefault() == 0);
@@ -1338,9 +1338,9 @@ public:
       vDest.swap(vSrc);
       // verify
       assert(vDest.data != vSrc.data);
-      assertUnit(Spy::numAssign() == 0); 
+      assertUnit(Spy::numAssign() == 0);
       assertUnit(Spy::numDestructor() == 0);
-      assertUnit(Spy::numDelete() == 0);    
+      assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numAlloc() == 0);
       assertUnit(Spy::numDefault() == 0);
       assertUnit(Spy::numNondefault() == 0);
@@ -1371,9 +1371,9 @@ public:
 
 
    /***************************************
-    * ASSIGN 
+    * ASSIGN
     ***************************************/
-   
+
    // assignment when there is nothing to copy
    void test_assign_empty()
    {  // setup
@@ -1395,7 +1395,7 @@ public:
       assertEmptyFixture(vSrc);
       assertEmptyFixture(vDest);
    }  // teardown
-   
+
    // assignment when source and destination are same size
    void test_assign_sameSize()
    {  // setup
@@ -1443,7 +1443,7 @@ public:
       teardownStandardFixture(vSrc);
       teardownStandardFixture(vDest);
    }
-   
+
    // assignment when the destination is smaller than the source
    void test_assign_rightBigger()
    {  // setup
@@ -1491,7 +1491,7 @@ public:
       teardownStandardFixture(vSrc);
       teardownStandardFixture(vDest);
    }
-   
+
    // assignment when the destination is bigger than the source
    void test_assign_leftBigger()
    {  // setup
@@ -1647,7 +1647,7 @@ public:
       assertUnit(Spy::numDestructor() == 2); // destroy [99,99]
       assertUnit(Spy::numDelete() == 2);     // delete [99,99]
       assertUnit(Spy::numCopy() == 0);
-      assertUnit(Spy::numAlloc() == 0);     
+      assertUnit(Spy::numAlloc() == 0);
       assertUnit(Spy::numDefault() == 0);
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numCopyMove() == 0);
@@ -1927,7 +1927,7 @@ public:
       //    +----+----+----+----+
       assertUnit(v.data != nullptr);
       if (v.data)
-      { 
+      {
          assertUnit(v.data[0] == Spy(99));
          v.data[0] = Spy(26);
       }
@@ -2157,7 +2157,7 @@ public:
    /***************************************
     * CLEAR
     ***************************************/
-   
+
    // clear an empty collection
    void test_clear_empty()
    {  // setup
@@ -2210,7 +2210,7 @@ public:
       // teardown
       teardownStandardFixture(v);
    }
-   
+
    // clear when there are elements
    void test_clear_partiallyFilled()
    {  // setup
@@ -2248,11 +2248,11 @@ public:
       teardownStandardFixture(v);
    }
 
-   
+
    /***************************************
     * PUSH BACK
     ***************************************/
-   
+
    // add an element to the back when empty
    void test_pushback_empty()
    {  // setup
@@ -2271,7 +2271,7 @@ public:
       assertUnit(Spy::numAssign() == 0);
       assertUnit(Spy::numAssignMove() == 0);
       assertUnit(Spy::numDestructor() == 0);
-      //      0    
+      //      0
       //    +----+
       //    | 99 |
       //    +----+
@@ -2324,7 +2324,7 @@ public:
    // add an element to the back when there is not room. Capacity should double
    void test_pushback_requireReallocate()
    {  // setup
-      //      0    1    2  
+      //      0    1    2
       //    +----+----+----+
       //    | 26 | 49 | 67 |
       //    +----+----+----+
@@ -2340,7 +2340,7 @@ public:
       // exercise
       v.push_back(s);
       // verify
-      assertUnit(Spy::numCopyMove() == 3);       // move [26,49,67] 
+      assertUnit(Spy::numCopyMove() == 3);       // move [26,49,67]
       assertUnit(Spy::numDestructor() == 3);     // destroy empty [26,49,67]
       assertUnit(Spy::numCopy() == 1);           // copy [99]
       assertUnit(Spy::numAlloc() == 1);          // allocate [99]
@@ -2349,7 +2349,7 @@ public:
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numAssign() == 0);
       assertUnit(Spy::numAssignMove() == 0);
-      //      0    1    2    3    4    5   
+      //      0    1    2    3    4    5
       //    +----+----+----+----+----+----+
       //    | 26 | 49 | 67 | 99 |    |    |
       //    +----+----+----+----+----+----+
@@ -2378,14 +2378,14 @@ public:
       // verify
       assertUnit(Spy::numCopyMove() == 1);       // copy-move [99]
       assertUnit(Spy::numCopy() == 0);
-      assertUnit(Spy::numAlloc() == 0);       
+      assertUnit(Spy::numAlloc() == 0);
       assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numDefault() == 0);
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numAssign() == 0);
       assertUnit(Spy::numAssignMove() == 0);
       assertUnit(Spy::numDestructor() == 0);
-      //      0    
+      //      0
       //    +----+
       //    | 99 |
       //    +----+
@@ -2418,9 +2418,9 @@ public:
       // exercise
       v.push_back(std::move(s));
       // verify
-      assertUnit(Spy::numCopyMove() == 1);   // copy-move [89] 
+      assertUnit(Spy::numCopyMove() == 1);   // copy-move [89]
       assertUnit(Spy::numCopy() == 0);
-      assertUnit(Spy::numAlloc() == 0);         
+      assertUnit(Spy::numAlloc() == 0);
       assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numDefault() == 0);
       assertUnit(Spy::numNondefault() == 0);
@@ -2439,7 +2439,7 @@ public:
    // add an element to the back when there is not room. Capacity should double
    void test_pushback_moveRequireReallocate()
    {  // setup
-      //      0    1    2  
+      //      0    1    2
       //    +----+----+----+
       //    | 26 | 49 | 67 |
       //    +----+----+----+
@@ -2457,14 +2457,14 @@ public:
       // verify
       assertUnit(Spy::numCopyMove() == 4);       // move [26,49,67] and [99]
       assertUnit(Spy::numDestructor() == 3);     // destroy empty [26,49,67]
-      assertUnit(Spy::numCopy() == 0);           
+      assertUnit(Spy::numCopy() == 0);
       assertUnit(Spy::numAlloc() == 0);
       assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numDefault() == 0);
       assertUnit(Spy::numNondefault() == 0);
       assertUnit(Spy::numAssign() == 0);
       assertUnit(Spy::numAssignMove() == 0);
-      //      0    1    2    3    4    5   
+      //      0    1    2    3    4    5
       //    +----+----+----+----+----+----+
       //    | 26 | 49 | 67 | 99 |    |    |
       //    +----+----+----+----+----+----+
@@ -2486,7 +2486,7 @@ public:
    /***************************************
     * ITERATOR
     ***************************************/
-   
+
    // empty iterator
    void test_iterator_beginEmpty()
    {  // setup
@@ -2497,7 +2497,7 @@ public:
       assertUnit(it.p == nullptr);
       assertEmptyFixture(v);
    }  // teardown
-  
+
    // iterator the first element
    void test_iterator_beginFull()
    {  // setup
@@ -2641,7 +2641,7 @@ public:
       custom::vector<Spy>::iterator it;
       // verify
       assertUnit(it.p == nullptr);
-      assertUnit(Spy::numCopyMove() == 0); 
+      assertUnit(Spy::numCopyMove() == 0);
       assertUnit(Spy::numDestructor() == 0);
       assertUnit(Spy::numCopy() == 0);
       assertUnit(Spy::numAlloc() == 0);
@@ -2680,7 +2680,7 @@ public:
       // teardown
       teardownStandardFixture(v);
    }
-   
+
    // create an iterator based on a vector and an index
    void test_iterator_construct_index()
    {  // setup
@@ -2899,7 +2899,7 @@ public:
          assertIndirect(v.data[3] == Spy(89));
       }
    }
-   
+
    /*************************************************************
     * VERIFY EMPTY FIXTURE PARAMETERS
     *************************************************************/
@@ -2909,7 +2909,7 @@ public:
       assertIndirect(v.numCapacity == 0);
       assertIndirect(v.numElements == 0);
    }
-   
+
    /*************************************************************
     * TEARDOWN STANDARD FIXTURE
     *************************************************************/

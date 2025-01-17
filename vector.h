@@ -43,7 +43,7 @@ class vector
    friend class ::TestPQueue;
    friend class ::TestHash;
 public:
-   
+
    //
    // Construct
    //
@@ -68,13 +68,13 @@ public:
    // Iterator
    //
    class iterator;
-   iterator begin() 
-   { 
-      return iterator(); 
+   iterator begin()
+   {
+      return iterator();
    }
-   iterator end() 
-   { 
-      return iterator(); 
+   iterator end()
+   {
+      return iterator();
    }
 
    //
@@ -113,9 +113,9 @@ public:
    size_t  size()          const { return numElements;}
    size_t  capacity()      const { return numCapacity;}
    bool empty()            const { return (numCapacity == 0) ? true : false ;}
-  
+
 private:
-   
+
    A    alloc;                // use allocator for memory allocation
    T *  data;                 // user data, a dynamically-allocated array
    size_t  numCapacity;       // the capacity of the array
@@ -210,7 +210,7 @@ vector <T, A> :: vector(const A & a)
  * construct each element, and copy the values over
  ****************************************/
 template <typename T, typename A>                                             // joe
-vector <T, A> :: vector(size_t num, const T & t, const A & a) 
+vector <T, A> :: vector(size_t num, const T & t, const A & a)
 {
     if (num > 0)
     {
@@ -243,7 +243,7 @@ vector <T, A> :: vector(const std::initializer_list<T> & l, const A & a)      //
  * construct each element, and copy the values over
  ****************************************/
 template <typename T, typename A>                                             // billy
-vector <T, A> :: vector(size_t num, const A & a) 
+vector <T, A> :: vector(size_t num, const A & a)
 {
     if (num > 0)
     {
@@ -277,11 +277,11 @@ vector <T, A> :: vector (const vector & rhs)                                  //
 	}
 	else
 		data = nullptr;
-   /*data = new T[100];
-   numElements = 19;
-   numCapacity = 29;*/
+
+   numElements = rhs.numElements;
+   numCapacity = rhs.numCapacity;
 }
-   
+
 /*****************************************
  * VECTOR :: MOVE CONSTRUCTOR
  * Steal the values from the RHS and set it to zero.
@@ -346,7 +346,7 @@ void vector <T, A> :: reserve(size_t newCapacity)
 template <typename T, typename A>
 void vector <T, A> :: shrink_to_fit()
 {
-    
+
 }
 
 
@@ -359,7 +359,7 @@ template <typename T, typename A>
 T & vector <T, A> :: operator [] (size_t index)
 {
    return *(new T);
-    
+
 }
 
 /******************************************
@@ -423,13 +423,13 @@ const T & vector <T, A> :: back() const
 template <typename T, typename A>
 void vector <T, A> :: push_back (const T & t)
 {
-    
+
 }
 
 template <typename T, typename A>
 void vector <T, A> ::push_back(T && t)
 {
-    
+
 
 }
 
@@ -443,7 +443,7 @@ void vector <T, A> ::push_back(T && t)
 template <typename T, typename A>
 vector <T, A> & vector <T, A> :: operator = (const vector & rhs)
 {
-   
+
    return *this;
 }
 template <typename T, typename A>
@@ -457,4 +457,3 @@ vector <T, A>& vector <T, A> :: operator = (vector&& rhs)
 
 
 } // namespace custom
-
