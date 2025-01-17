@@ -231,10 +231,14 @@ vector <T, A> :: vector(size_t num, const T & t, const A & a)
  ****************************************/
 template <typename T, typename A>
 vector <T, A> :: vector(const std::initializer_list<T> & l, const A & a)      // moe
+   : numElements(l.size()), numCapacity(l.size())
 {
-   data = new T[100];
-   numElements = 19;
-   numCapacity = 29;
+   if (numElements > 0)
+   {
+      data = alloc.allocate(numElements);
+      for (auto it = l.begin(); it != l.end(); ++it)
+         alloc.construct(&data[it - l.begin()], *it);
+   }
 }
 
 /*****************************************
@@ -269,17 +273,22 @@ vector <T, A> :: vector(size_t num, const A & a)
 template <typename T, typename A>
 vector <T, A> :: vector (const vector & rhs)                                  // jr
 {
-    if (rhs.numElements > 0)
+    if (rhs.numCapacity > 0)
     {
 		data = alloc.allocate(rhs.numElements);
+      numElements = rhs.numElements;
+      numCapacity = rhs.numElements;
 		for (size_t i = 0; i < rhs.numElements; i++)
 			alloc.construct(&data[i], rhs.data[i]);
-	}
-	else
-		data = nullptr;
-   /*data = new T[100];
-   numElements = 19;
-   numCapacity = 29;*/
+	 }
+    else
+    {
+       data = nullptr;
+       numElements = 0;
+       numCapacity = 0;
+    }
+       
+   
 }
    
 /*****************************************
@@ -289,9 +298,12 @@ vector <T, A> :: vector (const vector & rhs)                                  //
 template <typename T, typename A>
 vector <T, A> :: vector (vector && rhs)                                      // guss
 {
-   data = new T[100];
-   numElements = 19;
-   numCapacity = 29;
+   data = rhs.data;
+   rhs.data = nullptr;
+   numElements = rhs.numElements;
+   rhs.numElements = 0;
+   numCapacity = rhs.numCapacity;
+   rhs.numCapacity = 0;
 }
 
 /*****************************************
@@ -302,6 +314,12 @@ vector <T, A> :: vector (vector && rhs)                                      // 
 template <typename T, typename A>
 vector <T, A> :: ~vector()
 {
+   if (data != nullptr)
+   {
+      for (size_t i = 0; i < numElements; i++)
+         alloc.destroy(&data[i]);
+      alloc.deallocate(data, numCapacity);
+   }
 }
 
 /***************************************
@@ -443,7 +461,39 @@ void vector <T, A> ::push_back(T && t)
 template <typename T, typename A>
 vector <T, A> & vector <T, A> :: operator = (const vector & rhs)
 {
-   
+   if (rhs.size() == this->size())
+   {
+      for (size_t i = 0; i < this->size(); i++)
+         data[i] = rhs.data[i];
+   }
+   else if (rhs.size() > this->size())
+   {
+      if (rhs.size() <= this->capacity())
+      {
+         for (size_t i = 0; i < this->size(); i++)
+            data[i] = rhs.data[i];
+         for (size_t i = this->size(); i < rhs.size(); i++)
+            alloc.construct(&data[i], rhs.data[i]);
+      }
+      else
+      {
+         T * dataNew = alloc.allocate(rhs.size());
+         for (size_t i = 0; i < rhs.size(); i++)
+            alloc.construct(&dataNew[i], rhs.data[i]);
+         this->clear();
+         alloc.deallocate(data, this->capacity());
+         data = dataNew;
+         numCapacity = rhs.size();
+      }
+   }
+   else
+   {
+      for (size_t i = 0; i < rhs.size(); i++)
+         data[i] = rhs.data[i];
+      for (size_t i = rhs.size(); i < this->size(); i++)
+         alloc.destroy(&data[i]);
+   }
+   numElements = rhs.size();
    return *this;
 }
 template <typename T, typename A>
