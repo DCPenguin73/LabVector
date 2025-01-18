@@ -43,7 +43,7 @@ class vector
    friend class ::TestPQueue;
    friend class ::TestHash;
 public:
-   
+
    //
    // Construct
    //
@@ -111,9 +111,9 @@ public:
    size_t  size()          const { return numElements;}
    size_t  capacity()      const { return numCapacity;}
    bool empty()            const { return (numCapacity == 0) ? true : false ;}
-  
+
 private:
-   
+
    A    alloc;                // use allocator for memory allocation
    T *  data;                 // user data, a dynamically-allocated array
    size_t  numCapacity;       // the capacity of the array
@@ -214,7 +214,7 @@ vector <T, A> :: vector(const A & a)
  * construct each element, and copy the values over
  ****************************************/
 template <typename T, typename A>                                             // joe
-vector <T, A> :: vector(size_t num, const T & t, const A & a) 
+vector <T, A> :: vector(size_t num, const T & t, const A & a)
 {
     if (num > 0)
     {
@@ -251,7 +251,7 @@ vector <T, A> :: vector(const std::initializer_list<T> & l, const A & a)      //
  * construct each element, and copy the values over
  ****************************************/
 template <typename T, typename A>                                             // billy
-vector <T, A> :: vector(size_t num, const A & a) 
+vector <T, A> :: vector(size_t num, const A & a)
 {
     if (num > 0)
     {
@@ -292,9 +292,8 @@ vector <T, A> :: vector (const vector & rhs)                                  //
        numCapacity = 0;
     }
        
-   
 }
-   
+
 /*****************************************
  * VECTOR :: MOVE CONSTRUCTOR
  * Steal the values from the RHS and set it to zero.
@@ -368,7 +367,7 @@ void vector <T, A> :: reserve(size_t newCapacity)
 template <typename T, typename A>
 void vector <T, A> :: shrink_to_fit()
 {
-    
+
 }
 
 
@@ -380,8 +379,8 @@ void vector <T, A> :: shrink_to_fit()
 template <typename T, typename A>
 T & vector <T, A> :: operator [] (size_t index)
 {
-   return *(new T);
-    
+   return data[index];
+
 }
 
 /******************************************
@@ -391,7 +390,7 @@ T & vector <T, A> :: operator [] (size_t index)
 template <typename T, typename A>
 const T & vector <T, A> :: operator [] (size_t index) const
 {
-   return *(new T);
+   return data[index];
 }
 
 /*****************************************
@@ -401,7 +400,7 @@ const T & vector <T, A> :: operator [] (size_t index) const
 template <typename T, typename A>
 T & vector <T, A> :: front ()
 {
-   return *(new T);
+   return data[0];
 }
 
 /******************************************
@@ -411,7 +410,7 @@ T & vector <T, A> :: front ()
 template <typename T, typename A>
 const T & vector <T, A> :: front () const
 {
-   return *(new T);
+   return data[0];
 }
 
 /*****************************************
@@ -421,7 +420,7 @@ const T & vector <T, A> :: front () const
 template <typename T, typename A>
 T & vector <T, A> :: back()
 {
-   return *(new T);
+   return data[numElements - 1];
 }
 
 /******************************************
@@ -431,7 +430,7 @@ T & vector <T, A> :: back()
 template <typename T, typename A>
 const T & vector <T, A> :: back() const
 {
-   return *(new T);
+   return data[numElements - 1];
 }
 
 /***************************************
@@ -445,13 +444,13 @@ const T & vector <T, A> :: back() const
 template <typename T, typename A>
 void vector <T, A> :: push_back (const T & t)
 {
-    
+
 }
 
 template <typename T, typename A>
 void vector <T, A> ::push_back(T && t)
 {
-    
+
 
 }
 
@@ -562,4 +561,3 @@ vector <T, A>& vector <T, A> :: operator = (vector&& rhs)
 
 
 } // namespace custom
-
