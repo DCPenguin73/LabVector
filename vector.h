@@ -381,29 +381,37 @@ template <typename T, typename A>
 void vector <T, A> :: shrink_to_fit()
 {
     if (numElements == numCapacity)
-    {
         return;
-    }
-
-    if (numElements != 0)
+    else if (numElements == 0)
     {
-        T* dataNew = new T[numElements];
-        for (size_t i = 0; i < numElements; i++)
+        if (data != nullptr)
         {
-            dataNew[i] = data[i];
-            //delete(data);
+            alloc.deallocate(data, numCapacity);
+            data = nullptr;
+            numCapacity = 0;
         }
-
-        delete(data);
-        data = dataNew;
-        numCapacity = numElements;
     }
     else
     {
-        data = nullptr;
-        numCapacity = 0;
+        // Allocate new memory with the size of numElements
+        T* newData = alloc.allocate(numElements);
+
+        // Move elements to the new memory
+        for (size_t i = 0; i < numElements; ++i)
+        {
+            alloc.construct(&newData[i], data[i]);
+            alloc.destroy(&data[i]);
+        }
+
+        // Deallocate old memory
+        alloc.deallocate(data, numCapacity);
+
+        // Update data pointer and capacity
+        data = newData;
+        numCapacity = numElements;
     }
 }
+
 
 
 

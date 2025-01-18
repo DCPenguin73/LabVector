@@ -115,7 +115,7 @@ public:
       test_shrink_empty();              
       test_shrink_toEmpty();            
       test_shrink_standard();           
-      test_shrink_twoExtraSlots();      //failing
+      test_shrink_twoExtraSlots();      
       
       // Status
       test_size_empty();               
