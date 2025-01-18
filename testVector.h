@@ -60,6 +60,7 @@ public:
       test_swap_rightBigger();
       test_swap_leftBigger();
 
+
       //// Iterator
       test_iterator_beginEmpty();
       test_iterator_beginFull();
@@ -85,25 +86,25 @@ public:
       test_back_partiallyfilled();
 
       //// Insert
-      //test_pushback_empty();
-      //test_pushback_excessCapacity();
-      //test_pushback_requireReallocate();
-      //test_pushback_moveEmpty();
-      //test_pushback_moveExcessCapacity();
-      //test_pushback_moveRequireReallocate();
-      //test_resize_emptyZero();
-      //test_resize_emptyFourDefault();
-      //test_resize_emptyFourValue();
-      //test_resize_fourZero();
-      //test_resize_fourSixDefault();
-      //test_resize_fourSixValue();
-      //test_reserve_emptyZero();
-      //test_reserve_emptyTen();
-      //test_reserve_fourZero();
-      //test_reserve_fourFour();
-      //test_reserve_fourTen();
-      //test_reserve_standardZero();
-      //test_reserve_standardTen();
+      test_pushback_empty();
+      test_pushback_excessCapacity();
+      test_pushback_requireReallocate();
+      test_pushback_moveEmpty();
+      test_pushback_moveExcessCapacity();
+      test_pushback_moveRequireReallocate();
+      test_resize_emptyZero();
+      test_resize_emptyFourDefault();
+      test_resize_emptyFourValue();
+      test_resize_fourZero();
+      test_resize_fourSixDefault();
+      test_resize_fourSixValue();
+      test_reserve_emptyZero();
+      test_reserve_emptyTen();
+      test_reserve_fourZero();
+      test_reserve_fourFour();
+      test_reserve_fourTen();
+      test_reserve_standardZero();
+      test_reserve_standardTen();
       
       // Remove
       test_popback_empty();             
