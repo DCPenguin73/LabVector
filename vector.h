@@ -58,9 +58,7 @@ public:
    //
    // Assign
    //
-   void swap(vector& rhs)
-   {
-   }
+  void swap(vector& rhs);
    vector & operator = (const vector & rhs);
    vector & operator = (vector&& rhs);
 
@@ -452,6 +450,33 @@ void vector <T, A> ::push_back(T && t)
 }
 
 /***************************************
+ * VECTOR :: SWAP
+ * This method will swap the contents of the
+ * rhs onto *this, growing the buffer as needed
+ *     INPUT  : rhs the vector to swap with
+ *     OUTPUT : *this
+ **************************************/
+template <typename T, typename A>
+void vector <T, A> ::swap(vector& rhs)
+{
+   // Swap data pointers
+   T* tempData = data;
+   data = rhs.data;
+   rhs.data = tempData;
+
+   // Swap number of elements
+   size_t tempNumElements = numElements;
+   numElements = rhs.numElements;
+   rhs.numElements = tempNumElements;
+
+   // Swap capacity
+   size_t tempNumCapacity = numCapacity;
+   numCapacity = rhs.numCapacity;
+   rhs.numCapacity = tempNumCapacity;
+
+}
+
+/***************************************
  * VECTOR :: ASSIGNMENT
  * This operator will copy the contents of the
  * rhs onto *this, growing the buffer as needed
@@ -461,45 +486,69 @@ void vector <T, A> ::push_back(T && t)
 template <typename T, typename A>
 vector <T, A> & vector <T, A> :: operator = (const vector & rhs)
 {
-   if (rhs.size() == this->size())
+   if (this != &rhs)
    {
-      for (size_t i = 0; i < this->size(); i++)
-         data[i] = rhs.data[i];
-   }
-   else if (rhs.size() > this->size())
-   {
-      if (rhs.size() <= this->capacity())
+      // If the destination is smaller than the source
+      if (rhs.numElements > numCapacity)
       {
-         for (size_t i = 0; i < this->size(); i++)
-            data[i] = rhs.data[i];
-         for (size_t i = this->size(); i < rhs.size(); i++)
-            alloc.construct(&data[i], rhs.data[i]);
+         // Allocate new memory
+         T* newData = alloc.allocate(rhs.numElements);
+
+         // Copy elements from rhs to newData
+         for (size_t i = 0; i < rhs.numElements; ++i)
+            alloc.construct(&newData[i], rhs.data[i]);
+
+         // Destroy existing elements
+         for (size_t i = 0; i < numElements; ++i)
+            alloc.destroy(&data[i]);
+         alloc.deallocate(data, numCapacity);
+
+         // Update data pointer and capacity
+         data = newData;
+         numCapacity = rhs.numElements;
       }
       else
       {
-         T * dataNew = alloc.allocate(rhs.size());
-         for (size_t i = 0; i < rhs.size(); i++)
-            alloc.construct(&dataNew[i], rhs.data[i]);
-         this->clear();
-         alloc.deallocate(data, this->capacity());
-         data = dataNew;
-         numCapacity = rhs.size();
+         // Copy elements from rhs to existing data
+         for (size_t i = 0; i < rhs.numElements; ++i)
+         {
+            if (i < numElements)
+               data[i] = rhs.data[i];
+            else
+               alloc.construct(&data[i], rhs.data[i]);
+         }
+
+         // Destroy any remaining elements in the destination
+         for (size_t i = rhs.numElements; i < numElements; ++i)
+            alloc.destroy(&data[i]);
       }
+
+      // Update the number of elements
+      numElements = rhs.numElements;
    }
-   else
-   {
-      for (size_t i = 0; i < rhs.size(); i++)
-         data[i] = rhs.data[i];
-      for (size_t i = rhs.size(); i < this->size(); i++)
-         alloc.destroy(&data[i]);
-   }
-   numElements = rhs.size();
    return *this;
 }
 template <typename T, typename A>
 vector <T, A>& vector <T, A> :: operator = (vector&& rhs)
 {
+   if (this != &rhs)
+   {
+      // Destroy existing elements
+      for (size_t i = 0; i < numElements; ++i)
+         alloc.destroy(&data[i]);
+      alloc.deallocate(data, numCapacity);
 
+      // Move data from rhs to *this
+      data = rhs.data;
+      numElements = rhs.numElements;
+      numCapacity = rhs.numCapacity;
+      alloc = std::move(rhs.alloc);
+
+      // Reset rhs
+      rhs.data = nullptr;
+      rhs.numElements = 0;
+      rhs.numCapacity = 0;
+   }
    return *this;
 }
 

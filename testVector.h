@@ -55,10 +55,10 @@ public:
       test_assignMove_leftBigger();
       test_assign_fullToFull();
       test_assignMove_fullToFull();
-      //test_swap_empty();
-      //test_swap_sameSize();
-      //test_swap_rightBigger();
-      //test_swap_leftBigger();
+      test_swap_empty();
+      test_swap_sameSize();
+      test_swap_rightBigger();
+      test_swap_leftBigger();
 
       //// Iterator
       //test_iterator_beginEmpty();
