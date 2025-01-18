@@ -68,11 +68,11 @@ public:
    class iterator;
    iterator begin() 
    { 
-      return iterator(); 
+      return iterator(data); 
    }
    iterator end() 
    { 
-      return iterator(); 
+      return iterator(data + numElements); 
    }
 
    //
@@ -140,47 +140,53 @@ class vector <T, A> ::iterator
    friend class ::TestHash;
 public:
    // constructors, destructors, and assignment operator
-   iterator()                           {  }
-   iterator(T* p)                       {  }
-   iterator(const iterator& rhs)        {  }
-   iterator(size_t index, vector<T>& v) {  }
+   iterator() : p(nullptr)                                  {  }
+   iterator(T* p) : p(p)                                    {  }
+   iterator(const iterator& rhs) : p(rhs.p)                 {  }
+   iterator(size_t index, vector<T>& v) : p(&v.data[index]) {  }
    iterator& operator = (const iterator& rhs)
    {
+      if (this != &rhs)
+         p = rhs.p;
       return *this;
    }
 
    // equals, not equals operator
-   bool operator != (const iterator& rhs) const { return true; }
-   bool operator == (const iterator& rhs) const { return true; }
+   bool operator != (const iterator& rhs) const { return p != rhs.p; }
+   bool operator == (const iterator& rhs) const { return p == rhs.p; }
 
    // dereference operator
-   T& operator * ()
-   {
-      return *(new T);
-   }
+   T& operator * () { return *p;}
+   const T& operator*() const { return *p; }
 
    // prefix increment
    iterator& operator ++ ()
    {
+      ++p;
       return *this;
    }
 
    // postfix increment
    iterator operator ++ (int postfix)
    {
-      return *this;
+      iterator temp = *this;
+      ++p;
+      return temp;
    }
 
    // prefix decrement
    iterator& operator -- ()
    {
+      --p;
       return *this;
    }
 
    // postfix decrement
    iterator operator -- (int postfix)
    {
-      return *this;
+      iterator temp = *this;
+      --p;
+      return temp;
    }
 
 private:
