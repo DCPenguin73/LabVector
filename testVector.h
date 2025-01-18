@@ -104,7 +104,7 @@ public:
       //test_reserve_fourTen();
       //test_reserve_standardZero();
       //test_reserve_standardTen();
-
+      
       // Remove
       test_popback_empty();             
       test_popback_full();              
@@ -113,9 +113,9 @@ public:
       test_clear_full();                
       test_clear_partiallyFilled();     
       test_shrink_empty();              
-      test_shrink_toEmpty();            //failing
-      test_shrink_standard();          
-      test_shrink_twoExtraSlots();      
+      test_shrink_toEmpty();            
+      test_shrink_standard();           
+      test_shrink_twoExtraSlots();      //failing
       
       // Status
       test_size_empty();               
