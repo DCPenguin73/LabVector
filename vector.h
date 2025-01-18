@@ -99,9 +99,22 @@ public:
    //
    void clear()
    {
+       if (data != nullptr)
+       {
+           for (size_t i = 0; i < numElements; i++)
+           {
+               alloc.destroy(&data[i]);
+           }
+       }
+       numElements = 0;
    }
    void pop_back()
    {
+       if (data != nullptr)
+       {
+           alloc.destroy(&data[numElements - 1]);
+           numElements--;
+       }
    }
    void shrink_to_fit();
 
@@ -367,8 +380,38 @@ void vector <T, A> :: reserve(size_t newCapacity)
 template <typename T, typename A>
 void vector <T, A> :: shrink_to_fit()
 {
+    if (numElements == numCapacity)
+        return;
+    else if (numElements == 0)
+    {
+        if (data != nullptr)
+        {
+            alloc.deallocate(data, numCapacity);
+            data = nullptr;
+            numCapacity = 0;
+        }
+    }
+    else
+    {
+        // Allocate new memory with the size of numElements
+        T* newData = alloc.allocate(numElements);
 
+        // Move elements to the new memory
+        for (size_t i = 0; i < numElements; ++i)
+        {
+            alloc.construct(&newData[i], data[i]);
+            alloc.destroy(&data[i]);
+        }
+
+        // Deallocate old memory
+        alloc.deallocate(data, numCapacity);
+
+        // Update data pointer and capacity
+        data = newData;
+        numCapacity = numElements;
+    }
 }
+
 
 
 
