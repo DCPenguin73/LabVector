@@ -105,25 +105,25 @@ public:
       //test_reserve_standardZero();
       //test_reserve_standardTen();
 
-      //// Remove
-      //test_popback_empty();
-      //test_popback_full();
-      //test_popback_partiallyFilled();
-      //test_clear_empty();
-      //test_clear_full();
-      //test_clear_partiallyFilled();
-      //test_shrink_empty();
-      //test_shrink_toEmpty();
-      //test_shrink_standard();
-      //test_shrink_twoExtraSlots();
-      //
-      //// Status
-      //test_size_empty();
-      //test_size_full();
-      //test_empty_empty();
-      //test_empty_full();
-      //test_capacity_empty();
-      //test_capacity_full();
+      // Remove
+      test_popback_empty();             
+      test_popback_full();              
+      test_popback_partiallyFilled();   
+      test_clear_empty();               
+      test_clear_full();                
+      test_clear_partiallyFilled();     
+      test_shrink_empty();              
+      test_shrink_toEmpty();            //failing
+      test_shrink_standard();          
+      test_shrink_twoExtraSlots();      
+      
+      // Status
+      test_size_empty();               
+      test_size_full();                 
+      test_empty_empty();               
+      test_empty_full();                
+      test_capacity_empty();           
+      test_capacity_full();            
 
       report("Vector");
    }

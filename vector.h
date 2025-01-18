@@ -99,9 +99,22 @@ public:
    //
    void clear()
    {
+       if (data != nullptr)
+       {
+           for (size_t i = 0; i < numElements; i++)
+           {
+               alloc.destroy(&data[i]);
+           }
+       }
+       numElements = 0;
    }
    void pop_back()
    {
+       if (data != nullptr)
+       {
+           alloc.destroy(&data[numElements - 1]);
+           numElements--;
+       }
    }
    void shrink_to_fit();
 
@@ -367,7 +380,29 @@ void vector <T, A> :: reserve(size_t newCapacity)
 template <typename T, typename A>
 void vector <T, A> :: shrink_to_fit()
 {
+    if (numElements == numCapacity)
+    {
+        return;
+    }
 
+    if (numElements != 0)
+    {
+        T* dataNew = new T[numElements];
+        for (size_t i = 0; i < numElements; i++)
+        {
+            dataNew[i] = data[i];
+            //delete(data);
+        }
+
+        delete(data);
+        data = dataNew;
+        numCapacity = numElements;
+    }
+    else
+    {
+        data = nullptr;
+        numCapacity = 0;
+    }
 }
 
 
