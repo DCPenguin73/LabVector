@@ -20,6 +20,7 @@
 #pragma once
 
 #include <cassert>  // because I am paranoid
+#include <cstddef>
 #include <new>      // std::bad_alloc
 #include <memory>   // for std::allocator
 
@@ -348,14 +349,60 @@ vector <T, A> :: ~vector()
 template <typename T, typename A>
 void vector <T, A> :: resize(size_t newElements)
 {
-   numElements = 3;
-}
+    // If capacity is the same, do nothing.
+    if (newElements == numElements) {
+      return;
+    }
+
+    if (newElements < numElements) {
+      // Shrink: destroy excess elements
+      for (size_t i = newElements; i < numElements; i++) {
+        alloc.destroy(data + i);
+      }
+      numElements = newElements;
+      return;
+    }
+
+    // Grow
+    if (newElements > numCapacity) {
+      reserve(newElements);
+    }
+
+    // Construct new elements
+    for (size_t i = numElements; i < newElements; i++) {
+      alloc.construct(data + i);
+    }
+    numElements = newElements;
+  }
 
 template <typename T, typename A>
 void vector <T, A> :: resize(size_t newElements, const T & t)
 {
-   numElements = 3;
-}
+    // If capacity is the same, do nothing.
+    if (newElements == numElements) {
+      return;
+    }
+
+    if (newElements < numElements) {
+      // Shrink: destroy excess elements
+      for (size_t i = newElements; i < numElements; i++) {
+        alloc.destroy(data + i);
+      }
+      numElements = newElements;
+      return;
+    }
+
+    // Grow
+    if (newElements > numCapacity) {
+      reserve(newElements);
+    }
+
+    // Construct new elements (copy of t)
+    for (size_t i = numElements; i < newElements; i++) {
+      alloc.construct(data + i, t);
+    }
+    numElements = newElements;
+  }
 
 /***************************************
  * VECTOR :: RESERVE
@@ -368,7 +415,25 @@ void vector <T, A> :: resize(size_t newElements, const T & t)
 template <typename T, typename A>
 void vector <T, A> :: reserve(size_t newCapacity)
 {
-   numCapacity = 99;
+   if (newCapacity <= numCapacity) {
+      return;
+   }
+   // allocate new array
+   T * dataNew = alloc.allocate(newCapacity);
+
+   // move old elements to new array
+   for (size_t i = 0; i < numElements; i++) {
+       new ((void*)(dataNew + i)) T(std::move(data[i]));
+   }
+
+   for (size_t i = 0; i < numElements; i++) {
+      alloc.destroy(&data[i]);
+   }
+   alloc.deallocate(data, numCapacity);
+
+   data = dataNew;
+   numCapacity = newCapacity;
+
 }
 
 /***************************************
@@ -487,14 +552,29 @@ const T & vector <T, A> :: back() const
 template <typename T, typename A>
 void vector <T, A> :: push_back (const T & t)
 {
-
+   if (size() == 0) {
+      reserve(1);
+   }
+   // Vector is at capacity: double capacity
+   if (size() == capacity()) {
+      reserve(capacity() * 2);
+   }
+   // Add t to end of current values and increment numElements
+   alloc.construct(data + numElements++, t);
 }
 
 template <typename T, typename A>
 void vector <T, A> ::push_back(T && t)
 {
-
-
+    if (size() == 0) {
+       reserve(1);
+    }
+    // Vector is at capacity: double capacity
+    if (size() == capacity()) {
+       reserve(capacity() * 2);
+    }
+    // Move t to end of current values and increment numElements
+    alloc.construct(data + numElements++, std::move(t));
 }
 
 /***************************************
