@@ -20,6 +20,7 @@
 #pragma once
 
 #include <cassert>  // because I am paranoid
+#include <cstddef>
 #include <new>      // std::bad_alloc
 #include <memory>   // for std::allocator
 
@@ -314,13 +315,49 @@ vector <T, A> :: ~vector()
 template <typename T, typename A>
 void vector <T, A> :: resize(size_t newElements)
 {
-   numElements = 3;
+    if (newElements < numElements)
+    {
+       for (size_t i = newElements; i < numElements; i++)
+       {
+          alloc.destroy(&data[i]);
+       }
+    }
+    else if (newElements > numElements)
+    {
+       if (newElements > numCapacity)
+       {
+          reserve(newElements);
+       }
+       for (size_t i = numElements; i < newElements; i++)
+       {
+          new (&data[i]) T;
+       }
+    }
+    numElements = newElements;
 }
 
 template <typename T, typename A>
 void vector <T, A> :: resize(size_t newElements, const T & t)
 {
-   numElements = 3;
+   if (newElements < numElements)
+   {
+      for (size_t i = newElements; i < numElements; i++)
+      {
+         alloc.destroy(&data[i]);
+      }
+   }
+   else if (newElements > numElements)
+   {
+      if (newElements > numCapacity)
+      {
+         reserve(newElements);
+      }
+      for (size_t i = numElements; i < newElements; i++)
+      {
+         new (&data[i]) T;
+      }
+   }
+   numElements = newElements;
 }
 
 /***************************************
@@ -334,7 +371,24 @@ void vector <T, A> :: resize(size_t newElements, const T & t)
 template <typename T, typename A>
 void vector <T, A> :: reserve(size_t newCapacity)
 {
-   numCapacity = 99;
+   if (newCapacity <= numCapacity) {
+      return;
+   }
+
+   T * dataNew = alloc.allocate(newCapacity);
+
+   for (size_t i = 0; i < numElements; i++) {
+       new ((void*)(dataNew + i)) T(std::move(data[i]));
+   }
+
+   for (size_t i = 0; i < numElements; i++) {
+      alloc.destroy(&data[i]);
+   }
+   alloc.deallocate(data, numCapacity);
+
+   data = dataNew;
+   numCapacity = newCapacity;
+
 }
 
 /***************************************
@@ -423,7 +477,14 @@ const T & vector <T, A> :: back() const
 template <typename T, typename A>
 void vector <T, A> :: push_back (const T & t)
 {
-
+   if (numCapacity == 0) {
+      reserve(1);
+   }
+   if (size() == capacity()) {
+      reserve(capacity() * 2);
+   }
+   data[numElements] = t;
+   numElements++;
 }
 
 template <typename T, typename A>
