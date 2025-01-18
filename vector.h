@@ -315,50 +315,60 @@ vector <T, A> :: ~vector()
 template <typename T, typename A>
 void vector <T, A> :: resize(size_t newElements)
 {
-    if (newElements < numElements)
-    {
-       for (size_t i = newElements; i < numElements; i++)
-       {
-          alloc.destroy(&data[i]);
-       }
+    // If capacity is the same, do nothing.
+    if (newElements == numElements) {
+      return;
     }
-    else if (newElements > numElements)
-    {
-       if (newElements > numCapacity)
-       {
-          reserve(newElements);
-       }
-       for (size_t i = numElements; i < newElements; i++)
-       {
-          new (&data[i]) T;
-       }
+
+    if (newElements < numElements) {
+      // Shrink: destroy excess elements
+      for (size_t i = newElements; i < numElements; i++) {
+        alloc.destroy(data + i);
+      }
+      numElements = newElements;
+      return;
+    }
+
+    // Grow
+    if (newElements > numCapacity) {
+      reserve(newElements);
+    }
+
+    // Construct new elements
+    for (size_t i = numElements; i < newElements; i++) {
+      alloc.construct(data + i);
     }
     numElements = newElements;
-}
+  }
 
 template <typename T, typename A>
 void vector <T, A> :: resize(size_t newElements, const T & t)
 {
-   if (newElements < numElements)
-   {
-      for (size_t i = newElements; i < numElements; i++)
-      {
-         alloc.destroy(&data[i]);
+    // If capacity is the same, do nothing.
+    if (newElements == numElements) {
+      return;
+    }
+
+    if (newElements < numElements) {
+      // Shrink: destroy excess elements
+      for (size_t i = newElements; i < numElements; i++) {
+        alloc.destroy(data + i);
       }
-   }
-   else if (newElements > numElements)
-   {
-      if (newElements > numCapacity)
-      {
-         reserve(newElements);
-      }
-      for (size_t i = numElements; i < newElements; i++)
-      {
-         new (&data[i]) T;
-      }
-   }
-   numElements = newElements;
-}
+      numElements = newElements;
+      return;
+    }
+
+    // Grow
+    if (newElements > numCapacity) {
+      reserve(newElements);
+    }
+
+    // Construct new elements (copy of t)
+    for (size_t i = numElements; i < newElements; i++) {
+      alloc.construct(data + i, t);
+    }
+    numElements = newElements;
+  }
 
 /***************************************
  * VECTOR :: RESERVE
@@ -374,9 +384,10 @@ void vector <T, A> :: reserve(size_t newCapacity)
    if (newCapacity <= numCapacity) {
       return;
    }
-
+   // allocate new array
    T * dataNew = alloc.allocate(newCapacity);
 
+   // move old elements to new array
    for (size_t i = 0; i < numElements; i++) {
        new ((void*)(dataNew + i)) T(std::move(data[i]));
    }
@@ -477,21 +488,29 @@ const T & vector <T, A> :: back() const
 template <typename T, typename A>
 void vector <T, A> :: push_back (const T & t)
 {
-   if (numCapacity == 0) {
+   if (size() == 0) {
       reserve(1);
    }
+   // Vector is at capacity: double capacity
    if (size() == capacity()) {
       reserve(capacity() * 2);
    }
-   data[numElements] = t;
-   numElements++;
+   // Add t to end of current values and increment numElements
+   alloc.construct(data + numElements++, t);
 }
 
 template <typename T, typename A>
 void vector <T, A> ::push_back(T && t)
 {
-
-
+    if (size() == 0) {
+       reserve(1);
+    }
+    // Vector is at capacity: double capacity
+    if (size() == capacity()) {
+       reserve(capacity() * 2);
+    }
+    // Move t to end of current values and increment numElements
+    alloc.construct(data + numElements++, std::move(t));
 }
 
 /***************************************

@@ -85,12 +85,12 @@ public:
       test_back_partiallyfilled();
 
       //// Insert
-      //test_pushback_empty();
-      //test_pushback_excessCapacity();
-      //test_pushback_requireReallocate();
-      //test_pushback_moveEmpty();
-      //test_pushback_moveExcessCapacity();
-      //test_pushback_moveRequireReallocate();
+      test_pushback_empty();
+      test_pushback_excessCapacity();
+      test_pushback_requireReallocate();
+      test_pushback_moveEmpty();
+      test_pushback_moveExcessCapacity();
+      test_pushback_moveRequireReallocate();
       test_resize_emptyZero();
       test_resize_emptyFourDefault();
       test_resize_emptyFourValue();
